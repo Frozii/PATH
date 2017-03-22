@@ -56,7 +56,6 @@ function score_and_lives:coin_to_player_collision(player, popuptext)
 				player_score = player_score + 50
 				table.remove(score_and_lives, i)
 		end
-
 	end
 end
 
@@ -78,7 +77,6 @@ function score_and_lives:draw_score_and_lives()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.setFont(font2)
 	love.graphics.print('SCORE   '..player_score, 20, 15)
-
 	love.graphics.print('LIVES   '..player_health, 620, 15)
 end
 

@@ -117,10 +117,6 @@ function love.keypressed(key_pressed)
 			jump_audio:play()
 			player.yVel = -120
 		end
-
-		if key_pressed == 'escape' then
-			love.event.push('quit')
-		end
 	end
 end
 
