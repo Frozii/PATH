@@ -21,7 +21,7 @@ function love.load()
 	player:load()
 	score_and_lives:load()
 
-	game_state = 'Main_Menu'
+	game_state = 'Level_1'
 
 	love.mouse.setCursor(game_cursor)
 end
@@ -65,12 +65,12 @@ function love.update(dt)
 		enemies:move_enemy(dt)
 		enemies:collision_to_player(player, popuptext)
 		player:player_damaged(dt)
+		player:player_death(dt)
 		score_and_lives:update_coin(dt)
 		score_and_lives:coin_to_player_collision(player, popuptext)
 		popuptext:update_popuptext(dt)
 		player:react_to_fall()
 		levels:level1_end_update(player, dt)
-		player:player_death()
 	end
 
 	if game_state == 'Level_1_Complete' then
@@ -94,6 +94,10 @@ function love.draw()
 		popuptext:draw_popuptext()
 	end
 
+	if game_state == 'Level_2' then
+		love.graphics.setBackgroundColor(0, 255, 0, 255)
+	end
+
 	if game_state == 'Level_1_Complete' then
 		levels:level1_complete_draw()
 	end
@@ -101,21 +105,23 @@ end
 
 function love.keypressed(key_pressed)
 	if game_state == 'Level_1' then
-		if key_pressed == 'right' then
-			player_animation_timer = 0
-			current_player_quad = 3
+		if key_pressed == 'right' and
+			player_death == false then
+				player_animation_timer = 0
+				current_player_quad = 3
 		end
-
-		if key_pressed == 'left' then
-			player_animation_timer = 0
-			current_player_quad = 4
+		
+		if key_pressed == 'left' and
+			player_death == false then
+				player_animation_timer = 0
+				current_player_quad = 4
 		end
 
 		if key_pressed == 'space' and
-			is_jumping == false then
-
-			jump_audio:play()
-			player.yVel = -120
+			is_jumping == false and
+				player_death == false then
+					jump_audio:play()
+					player.yVel = -120
 		end
 	end
 end

@@ -8,8 +8,10 @@ function score_and_lives:load()
 	coin_stay_still_timer = 0
 	current_coin_quad = 1
 	player_score = 0
+	coin_count = 0
 	player_health = 3
 
+	coin_picture = love.graphics.newImage('Assets/Images/CoinPicture.png')
 	font2 = love.graphics.newFont('Assets/Fonts/ArcadeClassic.ttf', 42)
 	font3 = love.graphics.newFont('Assets/Fonts/ArcadeClassic.ttf', 16)
 
@@ -54,6 +56,7 @@ function score_and_lives:coin_to_player_collision(player, popuptext)
 				popuptext:spawn_popuptext(v.x, v.y - 20, '50')
 				coin_audio:play()
 				player_score = player_score + 50
+				coin_count = coin_count + 1
 				table.remove(score_and_lives, i)
 		end
 	end
@@ -76,8 +79,11 @@ end
 function score_and_lives:draw_score_and_lives()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.setFont(font2)
-	love.graphics.print('SCORE   '..player_score, 20, 15)
-	love.graphics.print('LIVES   '..player_health, 620, 15)
+	love.graphics.print(player_score, 50, 15)
+	love.graphics.draw(coin_picture, 325, 20)
+	love.graphics.print('x     '..coin_count, 385, 15)
+	love.graphics.draw(player_image, player_quads[2], 640, 15)
+	love.graphics.print('x     '..player_health, 700, 15)
 end
 
 return score_and_lives

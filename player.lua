@@ -12,6 +12,8 @@ function player:load()
 	player_damaged = false
 	player_damaged_state = 0
 	player_damaged_timer = 0
+	player_death = false
+	player_flip = 0
 	player_opacity = 255
 	player_image = love.graphics.newImage('Assets/Images/PlayerSpritesheet.png')
 	player_quads = {}
@@ -34,108 +36,94 @@ function player:draw_player()
 
 	love.graphics.setColor(255, 255, 255, player_opacity)
 
-	if not love.keyboard.isDown('left') then
-		love.graphics.draw(player_image, player_quads[current_player_quad], player.x, player.y)
+	if not love.keyboard.isDown('left') and
+			player_death == false then
+				love.graphics.draw(player_image, player_quads[current_player_quad], player.x, player.y)
 	end
 
-	if love.keyboard.isDown('left') then
-		love.graphics.draw(player_image, player_quads[current_player_quad], player.x, player.y, 0, -1, 1, 32)
+	if love.keyboard.isDown('left') and
+			player_death == false then
+				love.graphics.draw(player_image, player_quads[current_player_quad], player.x, player.y, 0, -1, 1, 32)
+	end
+
+	if player_death == true then
+		love.graphics.draw(player_image, player_quads[2], player.x, player.y, 0, 1, -1, 0, 32)
 	end
 
 	love.graphics.pop()
 end
 
 -- move the player depending on the key pressed, draws the correct quad of the player
-function player:movement(dt)	
-	player_breathing_timer = player_breathing_timer + dt
+function player:movement(dt)
+	if player_death == false then
 
-	if player.yVel ~= 0 then
-		is_jumping = true
-	else
-		is_jumping = false
-		jump_extension_timer = 0
-	end
+		player_breathing_timer = player_breathing_timer + dt
 
-	if is_jumping == true then
+		if player.yVel ~= 0 then
+			is_jumping = true
+		else
+			is_jumping = false
+			jump_extension_timer = 0
+		end
+
+		if is_jumping == true then
 			current_player_quad = 3
-	end
-
-	if love.keyboard.isDown('right') and
-		is_jumping == true then
-
-		current_player_quad = 3
-	end
-
-	if love.keyboard.isDown('left') and
-		is_jumping == true then
-
-		current_player_quad = 3
-	end
-
-	if not love.keyboard.isDown('right') and
-		not love.keyboard.isDown('left') and
-		not love.keyboard.isDown('space') and
-		is_jumping == false then
-
-		if player_breathing_timer < 0.6 then
-			current_player_quad = 2
 		end
 
-		if player_breathing_timer > 0.6 then
-			current_player_quad = 1
+		if love.keyboard.isDown('right') and
+			is_jumping == true then
+
+			current_player_quad = 3
 		end
 
-		if player_breathing_timer > 1.2 then
+		if love.keyboard.isDown('left') and
+			is_jumping == true then
+
+			current_player_quad = 3
+		end
+
+		if not love.keyboard.isDown('right') and
+			not love.keyboard.isDown('left') and
+			not love.keyboard.isDown('space') and
+			is_jumping == false then
+
+			if player_breathing_timer < 0.6 then
+				current_player_quad = 2
+			end
+
+			if player_breathing_timer > 0.6 then
+				current_player_quad = 1
+			end
+
+			if player_breathing_timer > 1.2 then
+				player_breathing_timer = 0
+			end
+	
+		else
+
 			player_breathing_timer = 0
 		end
-	
-	else
-
-		player_breathing_timer = 0
-	end
 
 
-	if love.keyboard.isDown('right') and
-		love.keyboard.isDown('left') then
+		if love.keyboard.isDown('right') and
+			love.keyboard.isDown('left') then
 
-		stay_still = true
-		current_player_quad = 2
+			stay_still = true
+			current_player_quad = 2
 
-	else
+		else
 
-		stay_still = false
-	end
-
-	if player.x < 1 then
-		current_player_quad = 2
-		player_animation_timer = 0
-	end
-
-	if love.keyboard.isDown('right') then
-
-		player.x = player.x + 175 * dt
-
-		if is_jumping == false then
-			player_animation_timer = player_animation_timer + dt
-
-			if stay_still == false then
-				if player_animation_timer > .150 then
-					player_animation_timer = 0
-					current_player_quad = current_player_quad + 1
-				end
-
-				if current_player_quad > 6 then
-					current_player_quad = 3
-				end
-			end
+			stay_still = false
 		end
-	end
 
-	if love.keyboard.isDown('left') then
+		if player.x < 1 then
+			current_player_quad = 2
+			player_animation_timer = 0
+		end
 
-		if player.x > 1 then
+		if love.keyboard.isDown('right') then
 
-			player.x = player.x - 175 * dt
+			player.x = player.x + 175 * dt
 
 			if is_jumping == false then
 				player_animation_timer = player_animation_timer + dt
@@ -152,30 +140,60 @@ function player:movement(dt)
 				end
 			end
 		end
-	end
 
-	if love.keyboard.isDown('space') and 
-		is_jumping == true then	
-	
-		jump_extension_timer = jump_extension_timer + dt
+		if love.keyboard.isDown('left') then
 
-		if jump_extension_timer < 0.5 then
-			player.yVel = player.yVel - 500 * dt
+			if player.x > 1 then
+
+				player.x = player.x - 175 * dt
+
+				if is_jumping == false then
+					player_animation_timer = player_animation_timer + dt
+
+					if stay_still == false then
+						if player_animation_timer > .150 then
+							player_animation_timer = 0
+							current_player_quad = current_player_quad + 1
+						end
+
+						if current_player_quad > 6 then
+							current_player_quad = 3
+						end
+					end
+				end
+			end
 		end
-	end
 
-	player.yVel = player.yVel + 400 * dt
+		if love.keyboard.isDown('space') and 
+			is_jumping == true then	
+	
+			jump_extension_timer = jump_extension_timer + dt
+
+			if jump_extension_timer < 0.5 then
+				player.yVel = player.yVel - 500 * dt
+			end
+		end
+
+		player.yVel = player.yVel + 400 * dt
 
 -- sets the amount of how much everything on the screen will move after the player passes a certain point
-	if player.x > 400 then
-		scroll_factor = player.x - 400
+		if player.x > 400 then
+			scroll_factor = player.x - 400
+		end
 	end
-	
 end
 
-function player:player_death()
+function player:player_death(dt)
 	if player_health == 0 then
-		game_state = 'Level_1_Complete'
+		player_death = true
+	end
+
+	if player_death == true then
+		player.y = player.y - 50 * dt
+
+		if player.y < 400 then
+			player_flip = true
+		end
 	end
 end
 
@@ -216,6 +234,8 @@ function player:react_to_fall()
 	if player.y > 600 then
 		player.y = 448
 		player.x = player.x - 150
+		player_health = player_health - 1
+		player_damaged = true
 	end
 end
 

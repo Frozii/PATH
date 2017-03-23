@@ -11,7 +11,6 @@ function enemies:load()
 	end
 end
 
-
 -- enters the given values into a table
 function enemies:spawn_enemy(x, y)
 	table.insert(enemies, {x = x, y = y, enemy_width = 32, enemy_height = 32, enemy_going_left = true, enemy_going_right = false, enemy_animation_timer = 0, current_enemy_quad = 1, rectangle_x = x - 32, rectangle_y = y, rectangle_width = 32, rectangle_height = 32, rectangle_yVel = 0, fall_sensing = 0, killed = false})
@@ -55,9 +54,8 @@ function enemies:collision_to_player(player, popuptext)
 					table.remove(enemies, i)
 		end
 
-		if aabb(v.x + 10, v.y + 10, v.enemy_width - 10, v.enemy_height - 10, player.x, player.y, player.width, player.height) and
-			player_damaged == false and
-				is_jumping == false then
+		if aabb(v.x + 10, v.y + 20, v.enemy_width - 10, v.enemy_height - 10, player.x, player.y, player.width, player.height) and
+			player_damaged == false then
 					player_health = player_health - 1
 					player_hurt_audio:play()
 					player_damaged = true

@@ -21,8 +21,6 @@ function levels:level1_load(score_and_lives, enemies)
 	player_hurt_audio = love.audio.newSource('Assets/Audio/PlayerHurt.wav', 'static')
 	enemy_hurt_audio = love.audio.newSource('Assets/Audio/EnemyHurt.wav', 'static')
 
-	font4 = love.graphics.newFont('Assets/Fonts/ArcadeClassic.ttf', 52)
-
 	score_and_lives:spawn_coin(808, 364)
 	score_and_lives:spawn_coin(935, 332)
 	score_and_lives:spawn_coin(1040, 332)
@@ -158,7 +156,7 @@ function levels:level1_complete_update(dt)
 	level_1_complete_timer = level_1_complete_timer + dt
 
 	if level_1_complete_timer > 3 then
-		love.event.quit()
+		game_state = 'Level_2'
 	end
 end
 
@@ -166,9 +164,13 @@ end
 function levels:level1_complete_draw()
 	love.graphics.setBackgroundColor(0, 0, 0, 255)
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.setFont(font4)
-	love.graphics.print('SCORE    '..player_score, 125, 250)
-	love.graphics.print('LIVES    '..player_health, 475, 250)
+	love.graphics.setFont(font2)
+	love.graphics.print(player_score, 50, 15)
+	love.graphics.draw(coin_picture, 335, 20)
+	love.graphics.print('x     '..coin_count, 385, 15)
+	love.graphics.draw(player_image, player_quads[2], 640, 15)
+	love.graphics.print('x     '..player_health, 700, 15)
+	love.graphics.print('Level 2', 350, 280)
 end
 
 return levels
