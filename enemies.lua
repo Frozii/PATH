@@ -47,7 +47,22 @@ function enemies:collision_to_player(player, popuptext)
 			player.yVel > 10 then
 					v.killed = true
 					popuptext:spawn_popuptext(v.x, v.y - 20, '100')
-					enemy_hurt_audio:play()
+
+					local full = true
+
+					for i=1, #enemy_hurt_audio do
+						if not enemy_hurt_audio[i]:isPlaying() then
+							full = false
+							enemy_hurt_audio[i]:play()
+						break
+						end
+					end
+
+					if full then
+						enemy_hurt_audio[#enemy_hurt_audio+1] = enemy_hurt_audio[1]:clone()
+						enemy_hurt_audio[#enemy_hurt_audio]:play()
+					end
+
 					player_score = player_score + 100
 					player.yVel = 0
 					player.yVel = player.yVel - 125
@@ -57,7 +72,7 @@ function enemies:collision_to_player(player, popuptext)
 		if aabb(v.x + 10, v.y + 20, v.enemy_width - 10, v.enemy_height - 10, player.x, player.y, player.width, player.height) and
 			player_damaged == false then
 					player_health = player_health - 1
-					player_hurt_audio:play()
+					player:player_hurt_audio()
 					player_damaged = true
 		end
 	end

@@ -21,7 +21,7 @@ function love.load()
 	player:load()
 	score_and_lives:load()
 
-	game_state = 'Level_1'
+	game_state = 'Main_Menu'
 
 	love.mouse.setCursor(game_cursor)
 end

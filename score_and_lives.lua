@@ -54,7 +54,22 @@ function score_and_lives:coin_to_player_collision(player, popuptext)
 	for i,v in ipairs(score_and_lives) do
 		if aabb(v.x, v.y, v.coin_width, v.coin_height, player.x + 5, player.y + 5, player.height - 5, player.width - 5) then
 				popuptext:spawn_popuptext(v.x, v.y - 20, '50')
-				coin_audio:play()
+
+					local full = true
+
+					for i=1, #coin_audio do
+						if not coin_audio[i]:isPlaying() then
+							full = false
+							coin_audio[i]:play()
+						break
+						end
+					end
+
+					if full then
+						coin_audio[#coin_audio+1] = coin_audio[1]:clone()
+						coin_audio[#coin_audio]:play()
+					end
+
 				player_score = player_score + 50
 				coin_count = coin_count + 1
 				table.remove(score_and_lives, i)

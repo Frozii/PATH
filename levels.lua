@@ -16,10 +16,16 @@ function levels:level1_load(score_and_lives, enemies)
 	cloud4 = love.graphics.newImage('Assets/Images/Cloud4.png')
 	bush = love.graphics.newImage('Assets/Images/Bush.png')
 
-	coin_audio = love.audio.newSource('Assets/Audio/Coin.wav', 'static')
 	jump_audio = love.audio.newSource('Assets/Audio/Jump.wav', 'static')
-	player_hurt_audio = love.audio.newSource('Assets/Audio/PlayerHurt.wav', 'static')
-	enemy_hurt_audio = love.audio.newSource('Assets/Audio/EnemyHurt.wav', 'static')
+
+	coin_audio = {}
+	coin_audio[1] = love.audio.newSource('Assets/Audio/Coin.wav', 'static')
+
+	player_hurt_audio = {}
+	player_hurt_audio[1] = love.audio.newSource('Assets/Audio/PlayerHurt.wav', 'static')
+
+	enemy_hurt_audio = {}
+	enemy_hurt_audio[1] = love.audio.newSource('Assets/Audio/EnemyHurt.wav', 'static')
 
 	score_and_lives:spawn_coin(808, 364)
 	score_and_lives:spawn_coin(935, 332)

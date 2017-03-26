@@ -235,9 +235,28 @@ function player:react_to_fall()
 		player.y = 448
 		player.x = player.x - 150
 		player_health = player_health - 1
+		player:player_hurt_audio()
 		player_damaged = true
 	end
 end
+
+function player:player_hurt_audio()
+	local full = true
+
+		for i=1, #player_hurt_audio do
+			if not player_hurt_audio[i]:isPlaying() then
+				full = false
+				player_hurt_audio[i]:play()
+			break
+			end
+		end
+
+		if full then
+			player_hurt_audio[#player_hurt_audio+1] = player_hurt_audio[1]:clone()
+			player_hurt_audio[#player_hurt_audio]:play()
+		end
+end
+
 
 -- checks the collision between the given parameters
 function player:calculate_collision(v1, v2)
