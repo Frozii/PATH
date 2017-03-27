@@ -70,7 +70,8 @@ function enemies:collision_to_player(player, popuptext)
 		end
 
 		if aabb(v.x + 10, v.y + 20, v.enemy_width - 10, v.enemy_height - 10, player.x, player.y, player.width, player.height) and
-			player_damaged == false then
+			player_damaged == false and
+				player_death == false then
 					player_health = player_health - 1
 					player:player_hurt_audio()
 					player_damaged = true

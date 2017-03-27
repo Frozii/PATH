@@ -13,7 +13,8 @@ function player:load()
 	player_damaged_state = 0
 	player_damaged_timer = 0
 	player_death = false
-	player_flip = 0
+	player_flip = false
+	player_flip_timer = 0
 	player_opacity = 255
 	player_image = love.graphics.newImage('Assets/Images/PlayerSpritesheet.png')
 	player_quads = {}
@@ -189,14 +190,18 @@ function player:player_death(dt)
 	end
 
 	if player_death == true then
-		player.y = player.y - 50 * dt
+		player_flip_timer = player_flip_timer + dt
 
-		if player.y < 400 then
-			player_flip = true
+		if player_flip == false then
+			player.y = player.y - 100 * dt
 		end
 	end
-end
 
+	if player_flip_timer > 0.5 then
+		player_flip = true
+		player.y = player.y + 200 * dt
+	end
+end
 function player:player_damaged(dt)
 	if player_damaged == true then
 		if player_damaged_state == 0 then
@@ -231,12 +236,18 @@ end
 
 -- decides what happens when the player falls
 function player:react_to_fall()
-	if player.y > 600 then
-		player.y = 448
-		player.x = player.x - 150
-		player_health = player_health - 1
-		player:player_hurt_audio()
-		player_damaged = true
+	if player.y > 600 and
+		player_death == false then
+			player.y = 448
+			player.x = player.x - 150
+			player_health = player_health - 1
+			player:player_hurt_audio()
+			player_damaged = true
+	end
+
+	if player.y > 600 and
+		player_death == true then
+			love.event.quit()
 	end
 end
 
@@ -260,7 +271,7 @@ end
 
 -- checks the collision between the given parameters
 function player:calculate_collision(v1, v2)
-	if aabb(v1.x, v1.y, v1.width, v1.height, v2.x, v2.y, v2.width, v2.height) then
+	if aabb(v1.x, v1.y, v1.width, v1.height, v2.x, v2.y, v2.width, v2.height) and player_death == false then
 		if (v1.x + v1.width > v2.x or v1.x < v2.x + v2.width) and (v1.y + v1.height > v2.y and v1.y + v1.height < v2.y + v2.height / 2) and v1.yVel > 0 then
 			v1.yVel = 0
 			v1.y = v2.y - v1.height -- bottom collision
