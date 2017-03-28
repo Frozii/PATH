@@ -1,0 +1,13 @@
+Things to do:
+
+- Fix the player jump extending functionality.
+- Add a sound for hovering over menu items.
+- Add game music.
+- Add player death music.
+- Add player music for finishing the level.
+- Add a second level for the game.
+
+
+Ctrl Shift Enter for making a newline above
+Ctrl Shift K for deleting linse
+Ctrl Shift D for duplicating (making new lines)
