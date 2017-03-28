@@ -14,3 +14,5 @@ Ctrl R Enter for going to the top of
 Ctrl Shift Enter for making a newline above
 Ctrl Shift K for deleting lines
 Ctrl Shift D for duplicating (making new lines)
+
+.md file means markdown language
