@@ -8,6 +8,9 @@ Things to do:
 - Add a second level for the game.
 
 
+Notes:
+
+Ctrl R Enter for going to the top of
 Ctrl Shift Enter for making a newline above
-Ctrl Shift K for deleting linse
+Ctrl Shift K for deleting lines
 Ctrl Shift D for duplicating (making new lines)
