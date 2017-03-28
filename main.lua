@@ -94,10 +94,7 @@ function love.draw()
 		popuptext:draw_popuptext()
 	end
 
-	if game_state == 'Level_2' then
-		love.graphics.setBackgroundColor(0, 255, 0, 255)
-	end
-
+	
 	if game_state == 'Level_1_Complete' then
 		levels:level1_complete_draw()
 	end
