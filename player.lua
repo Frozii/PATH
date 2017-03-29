@@ -171,8 +171,8 @@ function player:movement(dt)
 			jump_extension_timer = jump_extension_timer + dt
 
 			if jump_extension_timer < 0.5 then
-				player.yVel = player.yVel - 500 * dt
-			end
+					player.yVel = player.yVel - 500 * dt
+				end
 		end
 
 		player.yVel = player.yVel + 400 * dt
