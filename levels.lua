@@ -18,6 +18,8 @@ function levels:level1_load(score_and_lives, enemies)
 
 	jump_audio = love.audio.newSource('Assets/Audio/Jump.wav', 'static')
 
+	mouse_audio = love.audio.newSource('Assets/Audio/MouseHover.wav', 'static')
+
 	coin_audio = {}
 	coin_audio[1] = love.audio.newSource('Assets/Audio/Coin.wav', 'static')
 

@@ -24,9 +24,10 @@ function player:load()
 	scroll_factor = 0
 	is_jumping = false
 	jump_extension_timer = 0
+	jump_extension_max = false
 
-	for x = 1, 6 do
-		player_quads[x] = love.graphics.newQuad((x - 1) * 32, 0, 32, 32, 192, 32)
+	for x = 1, 7 do
+		player_quads[x] = love.graphics.newQuad((x - 1) * 32, 0, 32, 32, 224, 32)
 	end
 end
 
@@ -48,7 +49,7 @@ function player:draw_player()
 	end
 
 	if player_death == true then
-		love.graphics.draw(player_image, player_quads[2], player.x, player.y, 0, 1, -1, 0, 32)
+		love.graphics.draw(player_image, player_quads[7], player.x, player.y, 0, 1, -1, 0, 32)
 	end
 
 	love.graphics.pop()
@@ -64,7 +65,6 @@ function player:movement(dt)
 			is_jumping = true
 		else
 			is_jumping = false
-			jump_extension_timer = 0
 		end
 
 		if is_jumping == true then
@@ -122,6 +122,12 @@ function player:movement(dt)
 			player_animation_timer = 0
 		end
 
+		if love.keyboard.isDown('space') and
+			is_jumping == false then
+
+			current_player_quad = 2
+		end
+
 		if love.keyboard.isDown('right') then
 
 			player.x = player.x + 175 * dt
@@ -165,17 +171,31 @@ function player:movement(dt)
 			end
 		end
 
-		if love.keyboard.isDown('space') and 
-			is_jumping == true then	
-	
-			jump_extension_timer = jump_extension_timer + dt
-
-			if jump_extension_timer < 0.5 then
-					player.yVel = player.yVel - 500 * dt
-				end
+		if is_jumping == false and
+			not love.keyboard.isDown('space') then
+			jump_extension_max = false
+			jump_extension_timer = 0
 		end
 
-		player.yVel = player.yVel + 400 * dt
+		if is_jumping == true and
+			not love.keyboard.isDown('space') then
+			jump_extension_max = true
+			jump_extension_timer = 0.4
+		end
+
+		if is_jumping == true and
+			love.keyboard.isDown('space') then
+
+			if jump_extension_max == false then
+				jump_extension_timer = jump_extension_timer + dt
+
+				if jump_extension_timer < 0.3 then
+					player.yVel = player.yVel - 800 * dt
+				end
+			end
+		end
+
+		player.yVel = player.yVel + 500 * dt
 
 -- sets the amount of how much everything on the screen will move after the player passes a certain point
 		if player.x > 400 then
@@ -184,6 +204,7 @@ function player:movement(dt)
 	end
 end
 
+-- executes when the player dies
 function player:player_death(dt)
 	if player_health == 0 then
 		player_death = true
@@ -202,6 +223,8 @@ function player:player_death(dt)
 		player.y = player.y + 200 * dt
 	end
 end
+
+-- the response from the player to taking damage
 function player:player_damaged(dt)
 	if player_damaged == true then
 		if player_damaged_state == 0 then
@@ -251,6 +274,7 @@ function player:react_to_fall()
 	end
 end
 
+-- plays when the player gets hurt
 function player:player_hurt_audio()
 	local full = true
 
@@ -267,7 +291,6 @@ function player:player_hurt_audio()
 			player_hurt_audio[#player_hurt_audio]:play()
 		end
 end
-
 
 -- checks the collision between the given parameters
 function player:calculate_collision(v1, v2)

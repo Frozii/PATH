@@ -94,7 +94,7 @@ end
 function score_and_lives:draw_score_and_lives()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.setFont(font2)
-	love.graphics.print(player_score, 50, 15)
+	love.graphics.print(player_score, 70, 15)
 	love.graphics.draw(coin_picture, 325, 20)
 	love.graphics.print('x     '..coin_count, 385, 15)
 	love.graphics.draw(player_image, player_quads[2], 640, 15)

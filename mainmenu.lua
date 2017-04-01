@@ -49,7 +49,7 @@ end
 
 -- enters the given values into a table
 function mainmenu:spawn_button(x, y, text, id)
-	table.insert(mainmenu, {x = x, y = y, text = text, id = id, mouse_over = false})
+	table.insert(mainmenu, {x = x, y = y, text = text, id = id, mouse_over = false, can_play_audio = false})
 end
 
 -- moves the triangles on the sides of the menu items
@@ -109,8 +109,14 @@ function mainmenu:buttons_mouse_overlap_check()
 		if aabb(mouse_x, mouse_y, 0, 0, v.x, v.y + 13, font1:getWidth(v.text), font1:getHeight(v.text) - 30) then
 
 			v.mouse_over = true
+
+			if v.can_play_audio == true then
+				mouse_audio:play()
+				v.can_play_audio = false
+			end
 		else
 			v.mouse_over = false
+			v.can_play_audio = true
 		end
 	end
 end
