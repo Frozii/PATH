@@ -16,6 +16,8 @@ function levels:level1_load(score_and_lives, enemies)
 	cloud4 = love.graphics.newImage('Assets/Images/Cloud4.png')
 	bush = love.graphics.newImage('Assets/Images/Bush.png')
 
+	level1_audio = love.audio.newSource('Assets/Audio/Music1.wav')
+
 	jump_audio = love.audio.newSource('Assets/Audio/Jump.wav', 'static')
 
 	mouse_audio = love.audio.newSource('Assets/Audio/MouseHover.wav', 'static')

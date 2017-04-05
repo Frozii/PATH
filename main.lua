@@ -71,6 +71,7 @@ function love.update(dt)
 		popuptext:update_popuptext(dt)
 		player:react_to_fall()
 		levels:level1_end_update(player, dt)
+		level1_audio:play()
 	end
 
 	if game_state == 'Level_1_Complete' then
@@ -118,7 +119,7 @@ function love.keypressed(key_pressed)
 			is_jumping == false and
 				player_death == false then
 					jump_audio:play()
-					player.yVel = -120
+					player.yVel = -140
 		end
 	end
 end
