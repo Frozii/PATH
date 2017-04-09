@@ -1,6 +1,8 @@
 local levels = {}
 local TILE_AIR = 0
 local TILE_SIGN = 10
+applied_level2 = false
+level2_player_reset_applied = false
 
 -- loads level variables
 function levels:level1_load(score_and_lives, enemies)
@@ -27,6 +29,10 @@ function levels:level1_load(score_and_lives, enemies)
 
 	player_hurt_audio = {}
 	player_hurt_audio[1] = love.audio.newSource('Assets/Audio/PlayerHurt.wav', 'static')
+
+	player_death_audio = love.audio.newSource('Assets/Audio/PlayerDeath.wav', 'static')
+
+	player_victory_audio = love.audio.newSource('Assets/Audio/PlayerVictory.wav', 'static')
 
 	enemy_hurt_audio = {}
 	enemy_hurt_audio[1] = love.audio.newSource('Assets/Audio/EnemyHurt.wav', 'static')
@@ -62,7 +68,9 @@ function levels:level1_load(score_and_lives, enemies)
 	enemies:spawn_enemy(4600, 448)
 
 	tileset_quads = {}
+	tileset_quads2 = {}
 
+	-- Level 1
 	for x = 1, 10 do
 		tileset_quads[x] = love.graphics.newQuad((x - 1) * 32, 0, 32, 32, 320, 32)
 	end
@@ -77,6 +85,24 @@ function levels:level1_load(score_and_lives, enemies)
 			map_tilesetdata[x][y] = map_datatable.layers[1].data[(y - 1) * map_datatable.layers[1].width + x]
 		end
 	end
+	-- Level 1
+
+	-- Level 2
+	for x = 1, 10 do
+		tileset_quads2[x] = love.graphics.newQuad((x - 1) * 32, 0, 32, 32, 320, 32)
+	end
+
+	local map_function2 = love.filesystem.load('level2.lua')
+	local map_datatable2 = map_function2()
+
+	map_tilesetdata2 = {}
+	for x = 1, map_datatable2.layers[1].width do
+		map_tilesetdata2[x] = {}
+		for y = 1, map_datatable2.layers[1].height do
+			map_tilesetdata2[x][y] = map_datatable2.layers[1].data[(y - 1) * map_datatable2.layers[1].width + x]
+		end
+	end
+	-- Level 2
 
 	function levels:create_tile(x, y)
 		table.insert(levels, {x = x, y = y, width = 32, height = 32})
@@ -91,7 +117,7 @@ function levels:level1_load(score_and_lives, enemies)
 	end
 end
 
--- draw the map and decide some tile based decisions
+-- draw the map
 function levels:level1_draw()
 	love.graphics.push()
 
@@ -136,7 +162,7 @@ function levels:level1_draw()
 	love.graphics.pop()
 end
 
--- draws something
+-- draws a black screen
 function levels:level1_end_draw()
 	if level1_end == true then
 		love.graphics.setColor(0, 0, 0, level1_end_opacity)
@@ -148,6 +174,7 @@ end
 function levels:level1_end_update(player, dt)
 	if player.x + player.width > 5260 then
 		level1_end = true
+		player_victory_audio:play()
 	end
 
 	if level1_end == true and

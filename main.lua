@@ -9,15 +9,16 @@ local popuptext = require 'popuptext'
 local enemies = require 'enemies'
 local score_and_lives = require 'score_and_lives'
 local level1 = require 'level1'
+local level2 = require 'level2'
 local levels = require 'levels'
 local player = require 'player'
 local mainmenu = require 'mainmenu'
 local conf = require 'conf'
 
 function love.load()
-	enemies:load()
 	levels:level1_load(score_and_lives, enemies)
 	mainmenu:load()
+	enemies:load()
 	player:load()
 	score_and_lives:load()
 
@@ -71,7 +72,13 @@ function love.update(dt)
 		popuptext:update_popuptext(dt)
 		player:react_to_fall()
 		levels:level1_end_update(player, dt)
-		level1_audio:play()
+
+		if player_death == false and
+			level1_end == false then
+			level1_audio:play()
+		else
+			level1_audio:stop()
+		end
 	end
 
 	if game_state == 'Level_1_Complete' then
@@ -95,7 +102,6 @@ function love.draw()
 		popuptext:draw_popuptext()
 	end
 
-	
 	if game_state == 'Level_1_Complete' then
 		levels:level1_complete_draw()
 	end

@@ -207,6 +207,7 @@ end
 -- executes when the player dies
 function player:player_death(dt)
 	if player_health == 0 then
+		player_death_audio:play()
 		player_death = true
 	end
 
