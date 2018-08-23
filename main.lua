@@ -1,5 +1,4 @@
 --[[
-	Author: Rami Reini
 	Description: A 2D platformer with one level, enemies and coins.
 	All pixel art was made by me with ideas and inspiration acquired from different sources on the Internet.
 ]]
